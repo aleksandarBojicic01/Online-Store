@@ -1,7 +1,6 @@
 package com.aco.Menu;
 
 import com.aco.Aplication.App;
-import com.aco.Entities.AdminUser;
 import com.aco.Entities.User;
 import com.aco.Services.DefaultUserManagementService;
 import com.aco.Services.UserManagementService;
@@ -29,8 +28,8 @@ public class UserRemovalMenu implements Menu {
                 break;
             }
 
-            if (userManagementService.getUserByEmail(input) != null && !(userManagementService.getUserByEmail(input) instanceof AdminUser)) {
-                User userToRemove = null;
+            User userToRemove = userManagementService.getUserByEmail(input);
+            if (userToRemove != null && !(userToRemove.isAdmin()) && userToRemove != app.getCurrentUser()) {
                 for (User user : userManagementService.getUsers()) {
                     if (user.getEmail().equalsIgnoreCase(input)) {
                         userToRemove = user;

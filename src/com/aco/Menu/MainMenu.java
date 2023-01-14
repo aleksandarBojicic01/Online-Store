@@ -1,7 +1,6 @@
 package com.aco.Menu;
 
 import com.aco.Aplication.App;
-import com.aco.Entities.AdminUser;
 
 import java.util.Scanner;
 
@@ -94,7 +93,7 @@ public class MainMenu implements Menu {
                     menuToNavigate = new SettingMenu();
                     break loop;
                 case "8":
-                    if (app.getCurrentUser() != null && app.getCurrentUser() instanceof AdminUser) {
+                    if (app.getCurrentUser() != null && app.getCurrentUser().isAdmin()) {
                         menuToNavigate = new AdminMenu();
                         break loop;
                     } else {
@@ -114,7 +113,7 @@ public class MainMenu implements Menu {
     public void printMenuHeader() {
         if (app.getCurrentUser() == null) {
             System.out.println(LOGGED_OUT_USER_TEXT);
-        } else if (app.getCurrentUser() instanceof AdminUser) {
+        } else if (app.getCurrentUser().isAdmin()) {
             System.out.println(LOGGED_IN_ADMIN_TEXT);
         } else {
             System.out.println(LOGGED_IN_USER_TEXT);

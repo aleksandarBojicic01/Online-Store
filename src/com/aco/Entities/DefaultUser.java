@@ -6,6 +6,7 @@ public class DefaultUser implements User {
     private String password;
     private String email;
     private int id;
+    private boolean isAdmin;
 
     private static int idCounter;
 
@@ -15,7 +16,18 @@ public class DefaultUser implements User {
         this.lastName = lastName;
         this.password = password;
         this.email = email;
+        this.isAdmin = false;
         this.id = idCounter + 100;
+    }
+
+    @Override
+    public void setAdminStatus(boolean status) {
+        this.isAdmin = status;
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return this.isAdmin;
     }
 
     @Override

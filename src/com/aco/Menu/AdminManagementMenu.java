@@ -1,26 +1,19 @@
 package com.aco.Menu;
 
 import com.aco.Aplication.App;
-import com.aco.Entities.AdminUser;
-import com.aco.Entities.Order;
 import com.aco.Entities.User;
-import com.aco.Services.DefaultOrderManagementService;
 import com.aco.Services.DefaultUserManagementService;
-import com.aco.Services.OrderManagementService;
 import com.aco.Services.UserManagementService;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AdminManagementMenu implements Menu {
     private UserManagementService userManagementService;
     private App app;
-    private OrderManagementService orderManagementService;
 
     {
         userManagementService = DefaultUserManagementService.getInstance();
         app = App.getInstance();
-        orderManagementService = DefaultOrderManagementService.getInstance();
     }
 
     @Override
@@ -58,41 +51,25 @@ public class AdminManagementMenu implements Menu {
             }
         }
     }
-    // trenutno uklanja cijelog korisnika ne samo admin status
+
     private boolean removeAdmin(String adminEmail) {
-        AdminUser adminUserToRemove = null;
         boolean removedFlag = false;
+        User user = userManagementService.getUserByEmail(adminEmail);
 
-        for (User user : userManagementService.getUsers()) {
-            if (user.getEmail().equalsIgnoreCase(adminEmail) && user instanceof AdminUser) {
-                adminUserToRemove = (AdminUser) user;
-                removedFlag = true;
-            }
+        if (user != null && user.isAdmin()) {
+            user.setAdminStatus(false);
+            removedFlag = true;
         }
-        userManagementService.getUsers().remove(adminUserToRemove);
-
         return removedFlag;
     }
-    //za kasnije
-    // kad se napravi admin brise mu se istorija, pronaci novi nacin da se ovo izvede
+
     private boolean makeNewAdmin(String userEmail) {
         boolean madeFlag = false;
-        AdminUser adminUser = null;
-        User userToRemove = null;
+        User user = userManagementService.getUserByEmail(userEmail);
 
-        for (User user : userManagementService.getUsers()) {
-            if (user.getEmail().equalsIgnoreCase(userEmail) && !(user instanceof AdminUser)) {
-                adminUser = new AdminUser(user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail());
-                userToRemove = user;
-                madeFlag = true;
-                break;
-            }
-        }
-        if (madeFlag) {
-            ArrayList<Order> oldUserOrders = orderManagementService.getOrdersByUserId(userToRemove.getId());
-            orderManagementService.getOrdersByUserId(adminUser.getId()).addAll(oldUserOrders);
-            userManagementService.getUsers().remove(userToRemove);
-            userManagementService.getUsers().add(adminUser);
+        if (user != null && !user.isAdmin()) {
+            user.setAdminStatus(true);
+            madeFlag = true;
         }
         return madeFlag;
     }

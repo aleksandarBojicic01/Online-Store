@@ -1,6 +1,5 @@
 package com.aco.Services;
 
-import com.aco.Entities.AdminUser;
 import com.aco.Entities.DefaultUser;
 import com.aco.Entities.User;
 
@@ -19,10 +18,15 @@ public class DefaultUserManagementService implements UserManagementService {
 
     private void initializeUsers() {
         users = new ArrayList<>();
-        users.add(new AdminUser("Aleksandar", "Bojicic", "aco123", "aco@email.com"));
-        users.add(new AdminUser("Mica", "Moja", "mica123", "mica@email.com"));
-        users.add(new DefaultUser("Daco", "Bojicic", "daco123", "daco@email.com"));
-        users.add(new DefaultUser("Irena", "Bojicic", "irena123", "irena@email.com"));
+        users.add(new DefaultUser("Aleksandar", "Bojicic", "aco123", "aco@email.com"));
+        users.add(new DefaultUser("Mica", "Moja", "mica123", "mica@email.com"));
+        // setujemo ova dva usera kao admine
+        for (User user : users) {
+            user.setAdminStatus(true);
+        }
+
+        users.add(new DefaultUser("Daco", "Nekitamo", "daco123", "daco@email.com"));
+        users.add(new DefaultUser("Irena", "Nekatamo", "irena123", "irena@email.com"));
     }
 
     @Override
